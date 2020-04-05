@@ -1,0 +1,2 @@
+2020/03/26 15:31:37 [error] 6#6: *1 directory index of "/var/project/app/frontend/web/" is forbidden, client: 172.22.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:666"
+2020/03/26 15:31:38 [error] 6#6: *1 directory index of "/var/project/app/frontend/web/" is forbidden, client: 172.22.0.1, server: , request: "GET / HTTP/1.1", host: "localhost:666"

@@ -1,0 +1,48 @@
+version: '3'
+
+networks:
+  frontend:
+    driver: bridge
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ./:/var/project
+      - ./docker/etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/etc/nginx/sites-available:/etc/nginx/sites-available
+      - ./docker/etc/nginx/conf.d/:/etc/nginx/conf.d
+      - ./docker/var/log/nginx/:/var/log/nginx
+    ports:
+    - "666:666"
+    depends_on:
+      - php
+    networks:
+      - frontend
+
+  php:
+    build: ./docker/php-fpm
+    container_name: php
+    volumes:
+      - ./:/var/project
+#    restart: always
+    networks:
+      - frontend
+  slapd:
+    image: osixia/openldap
+    environment:
+      LDAP_ORGANISATION: example
+      LDAP_DOMAIN: example.com
+      LDAP_ADMIN_PASSWORD: secret
+    ports:
+      - 389:389
+  phpldapadmin:
+    image: osixia/phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: slapd
+      PHPLDAPADMIN_HTTPS: 'false'
+    ports:
+      - 88:80
+    depends_on:
+      - slapd
